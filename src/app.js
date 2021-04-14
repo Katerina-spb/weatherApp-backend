@@ -6,8 +6,8 @@ const app = express();
 const router = express.Router();
 
 const config = require('../config/config.js');
-const url = config.server;
-const token = config.token;
+const url = process.env.server;
+const token = process.env.token;
 
 const cors = require('cors');
 app.use(cors());
