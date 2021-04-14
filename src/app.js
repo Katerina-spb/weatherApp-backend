@@ -5,7 +5,7 @@ const serverless = require('serverless-http')
 const app = express();
 const router = express.Router();
 
-const config = require('../config/config.js');
+//const config = require('../config/config.js');
 const url = process.env.server;
 const token = process.env.token;
 
