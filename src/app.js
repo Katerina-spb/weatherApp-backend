@@ -3,22 +3,20 @@ const express = require('express');
 const serverless = require('serverless-http')
 
 const app = express();
-const routes = express.Router();
+const router = express.Router();
 
-const config = require('./config/config.js');
+const config = require('../config/config.js');
 const url = config.server;
 const token = config.token;
+
 const cors = require('cors');
-
-
 app.use(cors());
-app.use('/', router);
 
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
   res.send('<h1>Hello World!</h1>')
 });
 
-app.get('/forecast', (req, res) => {
+router.get('/forecast', (req, res) => {
   var city = req.query.city;
   axios.get(`${url}/forecast?q=${city}&appid=${token}&units=metric`)
   .then((response) => {
@@ -29,7 +27,7 @@ app.get('/forecast', (req, res) => {
   })
 });
 
-app.get('/weather', (req, res) => {
+router.get('/weather', (req, res) => {
   var city = req.query.city;
   axios.get(`${url}/weather?q=${city}&appid=${token}&units=metric`)
   .then((response) => {
@@ -39,6 +37,8 @@ app.get('/weather', (req, res) => {
     console.log(err);
   })
 });
+
+app.use('/.netlify/functions/app', router);
 
 module.exports.handler = serverless(app);
 
