@@ -1,8 +1,9 @@
 const axios = require('axios');
 const express = require('express');
+const serverless = require('serverless-http')
+
 const app = express();
-const path = require('path');
-const port = 3001;
+const routes = express.Router();
 
 const config = require('./config/config.js');
 const url = config.server;
@@ -10,8 +11,12 @@ const token = config.token;
 const cors = require('cors');
 
 
-app.use(express.static(path.join(__dirname, "/public")));
 app.use(cors());
+app.use('/', router);
+
+app.get('/', (req, res) => {
+  res.send('<h1>Hello World!</h1>')
+});
 
 app.get('/forecast', (req, res) => {
   var city = req.query.city;
@@ -22,7 +27,7 @@ app.get('/forecast', (req, res) => {
   .catch((err) => {
     console.log(err);
   })
-})
+});
 
 app.get('/weather', (req, res) => {
   var city = req.query.city;
@@ -33,9 +38,7 @@ app.get('/weather', (req, res) => {
   .catch((err) => {
     console.log(err);
   })
-})
+});
 
-app.listen(port, () =>
-  console.log(`listening on http://localhost:${port}`)
-);
+module.exports.handler = serverless(app);
 
